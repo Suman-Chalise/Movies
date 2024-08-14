@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using Data.Data;
+using Microsoft.EntityFrameworkCore.SqlServer;
+
 namespace Movie_Project
 {
     public class Program
@@ -8,6 +12,10 @@ namespace Movie_Project
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            var connections = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connections));
 
             var app = builder.Build();
 
