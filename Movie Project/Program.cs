@@ -15,7 +15,11 @@ namespace Movie_Project
 
             var connections = builder.Configuration.GetConnectionString("DefaultConnection");
 
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connections));
+            //builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connections)); 
+            // below we had to add because all seperated with class library and need to specify correct project
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connections, b => b.MigrationsAssembly("Movie Project")));
+       
 
             var app = builder.Build();
 
