@@ -1,0 +1,34 @@
+﻿@model List<Movie>
+
+<div class=" container">
+
+	<table class="table d-xxl-table-row">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Duration</th>
+				<th>Cost</th>
+
+			</tr>
+		
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>@item.MovieId</td>
+					
+					<td>@item.Title</td>
+					<td>@item.RunTime</td>
+					<td>@item.Price</td>
+					
+				</tr>
+				
+			}
+		
+
+		</tbody>
+	</table>
+
+</div>

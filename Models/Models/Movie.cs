@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+
 
 namespace Models.Models
 {
@@ -24,7 +28,22 @@ namespace Models.Models
 
         public string RunTime { get; set; }
 
+        public int CatId {  get; set; }
+        [ForeignKey("CatId")]
+		[ValidateNever]
+		public Category Category { get; set; }
+
+   
+        public int RatId { get; set; }
+        [ForeignKey("RatId")]
+		[ValidateNever]
+		public Ratings Ratings { get; set; }
 
 
-    }
+
+
+
+
+
+	}
 }

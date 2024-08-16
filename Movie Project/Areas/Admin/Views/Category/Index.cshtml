@@ -1,0 +1,49 @@
+﻿@model List<Category>
+
+	<div>
+		<div class="row">
+		 <div class="col-6">
+			<h2> List of movies </h2>
+
+		 </div>
+
+			
+		<div class="col-6">
+			<a class="btn btn-success" asp-action="Add">Add a category</a>
+		</div>
+	
+			
+		</div>
+	</div>
+
+
+	<div class=" container">
+
+		<table class="table d-xxl-table-row">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					
+
+				</tr>
+
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					<tr>
+						<td>@item.CategoryId</td>
+
+						<td>@item.Name</td>
+						
+					</tr>
+
+				}
+
+
+			</tbody>
+		</table>
+
+	</div>
+

@@ -1,0 +1,51 @@
+﻿@model Ratings
+
+<div class="container">
+	<div class="row">
+		<div class="col-6">
+			<h2>Add a Ratings</h2>
+		</div>
+		<div class="col-6">
+			<a class="btn btn-success" asp-action="Index">Back to List</a>
+		</div>
+	</div>
+
+</div>
+
+
+<div class="container">
+	<form method="post">
+
+		<div class="col-6 ">
+			<label asp-for="Name"></label>
+			<input asp-for="Name" class="form-control" type="text" />
+			<span class="text-danger" asp-validation-for="Name"></span>
+		</div>
+
+		<div class="col-6">
+			<label asp-for="Description"></label>
+			<input asp-for="Description" class="form-control"/>
+			<span class="text-danger" asp-validation-for="Description"></span>
+
+		</div>
+
+		<div class="col-6">
+			<label asp-for="RatingsLogo"></label>
+			<input asp-for="RatingsLogo" class="form-control" />
+			<span class="text-danger" asp-validation-for="RatingsLogo"></span>
+		</div>
+
+		<button type="submit" asp-action="Add" class="btn-outline-success mt-2">Add</button>
+
+	</form>
+
+	
+</div>
+
+@section Scripts{
+
+	@{
+		<partial name="_ValidationScriptsPartial" />
+	}
+
+}

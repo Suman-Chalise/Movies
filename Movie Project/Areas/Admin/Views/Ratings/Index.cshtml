@@ -1,0 +1,47 @@
+﻿@model List<Ratings>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-6">
+			<h2>List of Rartings</h2>
+		</div>
+		<div class="col-6">
+			<a class="btn btn-primary" asp-action="Add">Add a Ratings</a>
+		</div>
+	</div>
+
+</div>
+
+
+<div class="container">
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Logo</th>
+			</tr>
+
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+				{
+					<tr>
+						<td>@item.RatingsId</td>
+						<td>@item.Name</td>
+						<td>@item.Description</td>
+						<td>@item.RatingsLogo</td>
+
+					</tr>
+
+				}
+		
+		</tbody>
+
+	</table>
+
+</div>
+
+
