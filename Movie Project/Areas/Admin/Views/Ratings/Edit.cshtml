@@ -1,0 +1,71 @@
+﻿@model Ratings
+
+<div class="container">
+	<div class="row">
+		<div class="col-6">
+			<h2>Edit a Ratings</h2>
+		</div>
+		<div class="col-6 md-flex justify-content-md-end">
+			<a class="btn btn-success float-end" asp-action="Index">Back to List</a>
+		</div>
+	</div>
+
+</div>
+
+
+<div class="row border border-2 rounded-2">
+
+
+	<div class="container col-6">
+	<form method="post" enctype="multipart/form-data">
+			<input asp-for="RatingsId" hidden />
+			<input asp-for="RatingsLogo" hidden />
+
+		<div class="col-12 ">
+			<label asp-for="Name"></label>
+			<input asp-for="Name" class="form-control" type="text" />
+			<span class="text-danger" asp-validation-for="Name"></span>
+		</div>
+
+		<div class="col-12">
+			<label asp-for="Description"></label>
+			<input asp-for="Description" class="form-control" />
+			<span class="text-danger" asp-validation-for="Description"></span>
+
+		</div>
+
+		@* 		<div class="col-6">
+		<label asp-for="RatingsLogo" class="ms-2" ></label>
+		<input asp-for="RatingsLogo" class="form-control" />
+		<span class="text-danger" asp-validation-for="RatingsLogo"></span>
+		</div> *@
+
+		<div class="col-12">
+			<label asp-for="RatingsLogo" class="form-label"> Change Ratings Logo</label>
+			<input type="file" name="file" class="form-control">
+			<span class="text-danger" asp-validation-for="RatingsLogo"></span>
+
+
+		</div>
+
+
+		<button type="submit" asp-action="Edit" class="btn-primary mt-4 mb-2 float-end">Submit</button>
+
+	</form>
+
+
+	</div>
+
+	<div class="col-6">
+		<img src="@Model.RatingsLogo" alt="Product Image" class="rating-image-edit"/>
+	</div>
+
+</div>
+
+@section Scripts {
+
+	@{
+		<partial name="_ValidationScriptsPartial" />
+	}
+
+}

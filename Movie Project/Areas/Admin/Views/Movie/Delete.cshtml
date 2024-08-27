@@ -1,0 +1,138 @@
+﻿@model MovieVM
+
+
+<div class=" container">
+	<div class="row">
+		<div class="col-6">
+			<h2>Delete a Movie</h2>
+
+		</div>
+
+
+		<div class="col-6">
+			<a class="btn btn-primary float-end" asp-action="Index">Back To Index</a>
+		</div>
+
+
+	</div>
+</div>
+
+<div class="row border border-2 rounded-2">
+
+	<div class="container col-6">
+
+		<form method="post" enctype="multipart/form-data">
+			<input asp-for="Movie.MovieId" hidden/>
+			<input asp-for="Movie.Image" hidden/>
+
+
+
+			<div class="col-12">
+				<label asp-for="Movie.Title"></label>
+				<input asp-for="Movie.Title" class="form-control" />
+				<span asp-validation-for="Movie.Title" class="text-danger"></span>
+
+			</div>
+
+			<div class="col-12">
+				<label asp-for="Movie.RunTime"></label>
+				<input asp-for="Movie.RunTime" class="form-control" />
+				<span asp-validation-for="Movie.RunTime" class="text-danger"></span>
+
+			</div>
+
+			<div class="col-12">
+				<label asp-for="Movie.ReleaseDate"></label>
+				<input asp-for="Movie.ReleaseDate" class="form-control" />
+				<span asp-validation-for="Movie.ReleaseDate" class="text-danger"></span>
+
+			</div>
+
+			<div class="col-12">
+				<label asp-for="Movie.Price"></label>
+				<input asp-for="Movie.Price" class="form-control" />
+				<span asp-validation-for="Movie.Price" class="text-danger"></span>
+
+			</div>
+			<div class="col-12">
+				<label asp-for="Movie.Director"></label>
+				<input asp-for="Movie.Director" class="form-control" />
+				<span asp-validation-for="Movie.Director" class="text-danger"></span>
+
+			</div>
+			<div class="col-12">
+				<label asp-for="Movie.Cast"></label>
+				<input asp-for="Movie.Cast" class="form-control" />
+				<span asp-validation-for="Movie.Cast" class="text-danger"></span>
+
+			</div>
+			@* 		<div class="col-6">
+			<label asp-for="Movie.Category"></label>
+			<input asp-for="Movie.Category" class="form-control" />
+			<span asp-validation-for="Movie.Category" class="text-danger"></span>
+
+			</div>
+			<div class="col-6">
+			<label asp-for="Movie.Ratings"></label>
+			<input asp-for="Movie.Ratings" class="form-control" />
+			<span asp-validation-for="Movie.Ratings" class="text-danger"></span>
+
+			</div> *@
+
+			<div class="col-12">
+				<label asp-for="Movie.Category"></label>
+
+
+				<select asp-for="Movie.CatId" asp-items="@Model.CategoryList" class="form-select"><option disabled selected>--Select---</option></select>
+				<span asp-validation-for="Movie.Category" class="text-danger"></span>
+
+			</div>
+
+			<div class="col-12">
+				<label asp-for="Movie.Ratings"></label>
+
+
+				<select asp-for="Movie.RatId" asp-items="@Model.RatingList" class="form-select"><option disabled selected>--Select---</option></select>
+				<span asp-validation-for="Movie.Ratings" class="text-danger"></span>
+
+			</div>
+
+			<div class="col-12">
+				<label asp-for="Movie.Image" class="form-label">Image</label>
+				<input type="file" name="file" class="form-control" />
+				<span asp-validation-for="Movie.Image" class="text-danger"></span>
+
+			</div>
+
+
+
+
+		
+
+		<button type="submit" asp-controller="Movie" asp-action="DeletePost" asp-route-id ="@Model.Movie.MovieId" class="btn-outline-danger mt-2">Delete</button>
+
+
+
+
+		</form>
+
+	</div>
+
+	<div class="container col-6">
+		<img src="@Model.Movie.Image" alt="Product Image" class="Movie-Image" />
+	</div>
+</div>
+
+
+@section Scripts {
+	@{
+		<partial name="_ValidationScriptsPartial" />
+	}
+}
+
+
+
+
+
+
+

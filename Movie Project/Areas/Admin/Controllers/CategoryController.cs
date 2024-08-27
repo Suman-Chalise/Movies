@@ -41,6 +41,51 @@ namespace Movie_Project.Areas.Admin.Controllers
 			return View(category);
 		}
 
+        public IActionResult Edit(int? id)
+        {
+
+            var obj =   _context.C_Category.FirstOrDefault(q => q.CategoryId == id);
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Category category)
+        {
+
+            if (ModelState.IsValid)
+            {
+                _context.C_Category.Update(category);
+                _context.SaveChanges();
+
+               return RedirectToAction ("Index");
+            }
+
+            return View(category);
+
+        }
+
+        public IActionResult Delete(int id)
+        {
+			var obj = _context.C_Category.FirstOrDefault(q => q.CategoryId == id);
+
+			return View(obj);
+		}
+
+        [HttpPost]
+		public IActionResult DeletePost(Category category)
+		{
+			
+
+			_context.C_Category.Remove(category);
+
+            _context.SaveChanges();
+
+            return RedirectToAction ("Index");
+			
+		}
+
+
 
 	}
 }

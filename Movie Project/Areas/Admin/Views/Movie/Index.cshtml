@@ -1,14 +1,42 @@
 ﻿@model List<Movie>
 
 <div class=" container">
+	<div class="row">
+		<div class="col-6">
+			<h2> List of movies </h2>
+
+		</div>
+
+
+		<div class="col-6">
+			<a class="btn btn-primary float-end" asp-action="Create">Add a Movie</a>
+		</div>
+
+
+	</div>
+</div>
+
+
+
+<div class=" container">
 
 	<table class="table d-xxl-table-row">
 		<thead>
 			<tr>
 				<th>ID</th>
-				<th>Name</th>
+				<th>Title</th>
 				<th>Duration</th>
-				<th>Cost</th>
+				<th>Release Date</th>
+				<th>Price</th>
+				<th>Director</th>
+				<th>Cast</th>
+				<th>Category/Genre</th>
+				<th>Ratings</th>
+				<th>Movie Image</th>
+				<th>Actions</th>
+				
+		
+
 
 			</tr>
 		
@@ -18,10 +46,36 @@
 			{
 				<tr>
 					<td>@item.MovieId</td>
-					
 					<td>@item.Title</td>
 					<td>@item.RunTime</td>
-					<td>@item.Price</td>
+					<td>@item.ReleaseDate</td>
+					<td>@item.Price.ToString("c")</td>
+					<td>@item.Director</td>
+					<td>@item.Cast</td>			
+				    <td>@item.Category.Name</td>
+					
+
+					<td class="col-2">
+						<img src="@item.Ratings.RatingsLogo" alt="Product Image" class="img-thumbnail index-image" />
+					</td>
+
+					<td class="col-2">
+						<img src="@item.Image" alt="Movie Image" class="img-thumbnail index-image-movie" />
+					</td>
+
+					<td>
+						<form method="post">
+							<div class="btn-group gap-2">
+								<a asp-controller="Movie" asp-action="Edit" asp-route-id="@item.MovieId" class="btn btn-outline-info">Edit</a>
+								<button type="submit" asp-controller="Movie" asp-action="Delete" asp-route-id="@item.MovieId" class="btn btn-outline-info">Delete</button>
+							</div>
+						</form>
+					</td>
+
+				
+
+					
+
 					
 				</tr>
 				
