@@ -22,6 +22,8 @@ namespace Movie_Project
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connections, b => b.MigrationsAssembly("Movie Project")));
 
             builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
        
 
             var app = builder.Build();

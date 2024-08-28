@@ -27,6 +27,7 @@ namespace Data.Repository
         public void Delete(Category category)
         {
             _context.C_Category.Remove(category);
+            _context.SaveChanges();
         }
 
         public Category GetbyId(int id)
