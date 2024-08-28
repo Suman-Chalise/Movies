@@ -2,6 +2,7 @@
 using Data.Repository;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Models.Models;
 using Models.ViewModels;
@@ -11,79 +12,133 @@ namespace Movie_Project.Areas.Admin.Controllers
     public class MovieController : Controller
     {
 
-        private readonly ApplicationDbContext _context;  
+       // private readonly ApplicationDbContext _context;  
 
-		private readonly IMovieRepository _movieRepository;
+		//private readonly IMovieRepository _movieRepository;
+
+		private readonly IUnitOfWork _unitOfWork;
 
 
 		private readonly IWebHostEnvironment _webHostEnvironment;
 
 
 
-		public MovieController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, IMovieRepository movieRepository)
+		public MovieController(/*ApplicationDbContext context,*/ IWebHostEnvironment webHostEnvironment, /*IMovieRepository movieRepository*/ IUnitOfWork unitOfWork)
 		{
-			_context = context;
+			//_context = context;
 			_webHostEnvironment = webHostEnvironment;
-			_movieRepository = movieRepository;
+			//_movieRepository = movieRepository;
+			_unitOfWork = unitOfWork;
+
 		}
 
 		public IActionResult Index()
         {
 
-			MovieVM vm = new MovieVM()
-			{
-				CategoryList = _context.C_Category.ToList().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-				{
-					Text = a.Name,
-					Value = a.CategoryId.ToString(),
+            //MovieVM vm = new MovieVM()
+            //{
+            //	CategoryList = _context.C_Category.ToList().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
 
-				}),
+            //	{
+            //		Text = a.Name,
+            //		Value = a.CategoryId.ToString(),
 
-				RatingList = _context.R_Ratings.ToList().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-				{
-					Text = a.Name,
-					Value = a.RatingsId.ToString(),
+            //	}),
 
-				}),
+            //	RatingList = _context.R_Ratings.ToList().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            //	{
+            //		Text = a.Name,
+            //		Value = a.RatingsId.ToString(),
 
-				Movie = new Movie()
+            //	}),
 
-			};
+            //	Movie = new Movie()
+
+            //};
 
 
-            //var mList =  _context.M_Movies.ToList();
-            // return View(mList);
+            ////var mList =  _context.M_Movies.ToList();
+            //// return View(mList);
 
+
+            //// Use the repository to get all movies
+            //var ListfromRepo = _unitOfWork.MovieUnit.GetAll();
+            //return View(ListfromRepo);
+
+            // Use the Unit of Work to retrieve the categories
+            var categories = _unitOfWork.CategoryUnit.GetAllCategories().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            {
+                Text = a.Name,
+                Value = a.CategoryId.ToString(),
+            });
+
+            // Use the Unit of Work to retrieve the ratings
+            var ratings = _unitOfWork.RatingUnit.GetAll().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            {
+                Text = a.Name,
+                Value = a.RatingsId.ToString(),
+            });
+
+            // Create the ViewModel and assign the data retrieved from the repository
+            MovieVM vm = new MovieVM()
+            {
+                CategoryList = categories,
+                RatingList = ratings,
+                Movie = new Movie()  // Assuming you want an empty movie object initially
+            };
 
             // Use the repository to get all movies
-            var ListfromRepo = _movieRepository.GetAll();
-			return View(ListfromRepo);
-           
+            var ListfromRepo = _unitOfWork.MovieUnit.GetAll();
+
+            // Return the ViewModel to the view
+            return View(ListfromRepo);
+
         }
 
 		public IActionResult Create()
 		{	
             
-          MovieVM vm = new MovieVM() 
-          {
-			  CategoryList = _context.C_Category.ToList().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-			  {
-				  Text = a.Name,
-				  Value = a.CategoryId.ToString(),
+			//       MovieVM vm = new MovieVM() 
+			 //       {
+			//  CategoryList = _context.C_Category.ToList().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+			//  {
+			//	  Text = a.Name,
+			//	  Value = a.CategoryId.ToString(),
 
-			  }),
+			//  }),
 
-			  RatingList = _context.R_Ratings.ToList().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-			  {
-				  Text = a.Name,
-				  Value = a.RatingsId.ToString(),
+			//  RatingList = _context.R_Ratings.ToList().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+			//  {
+			//	  Text = a.Name,
+			//	  Value = a.RatingsId.ToString(),
 
-			  }),
+			//  }),
 
-			  Movie = new Movie()
+			//  Movie = new Movie()
 
-		  };	
+		    // };	
 			
+			//return View(vm);
+
+			var categories = _unitOfWork.CategoryUnit.GetAllCategories().Select (b => new SelectListItem
+			{
+				Text =b.Name,
+				Value = b.CategoryId.ToString(),
+			});
+			
+			var ratings = _unitOfWork.RatingUnit.GetAll().Select(c => new SelectListItem
+			{
+				Text =c.Name,
+				Value = c.RatingsId.ToString(),
+			});
+
+			MovieVM vm = new MovieVM() 
+			{
+			  CategoryList= categories,
+			  RatingList= ratings,
+			  Movie = new Movie()
+			};
+
 			return View(vm);
 		}
 
@@ -145,7 +200,9 @@ namespace Movie_Project.Areas.Admin.Controllers
 
 				// Use the repository to add the movie
 
-				_movieRepository.Add(movieVM.Movie);
+				//_movieRepository.Add(movieVM.Movie);
+
+				_unitOfWork.MovieUnit.Add(movieVM.Movie);
 
                 return RedirectToAction("Index");
 
@@ -158,40 +215,59 @@ namespace Movie_Project.Areas.Admin.Controllers
 		{
             // Initialize the MovieVM with categories and ratings
 
+            //         MovieVM vm = new MovieVM()
+            //{
+            //	CategoryList = _context.C_Category.ToList().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            //	{
+            //		Text = a.Name,
+            //		Value = a.CategoryId.ToString(),
+
+            //	}),
+
+            //	RatingList = _context.R_Ratings.ToList().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            //	{
+            //		Text = a.Name,
+            //		Value = a.RatingsId.ToString(),
+
+            //	}),
+
+            //	Movie = new Movie()
+
+            //};
+
+            var categories = _unitOfWork.CategoryUnit.GetAllCategories().Select(b => new SelectListItem
+            {
+                Text = b.Name,
+                Value = b.CategoryId.ToString(),
+            });
+
+            var ratings = _unitOfWork.RatingUnit.GetAll().Select(c => new SelectListItem
+            {
+                Text = c.Name,
+                Value = c.RatingsId.ToString(),
+            });
+
             MovieVM vm = new MovieVM()
-			{
-				CategoryList = _context.C_Category.ToList().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-				{
-					Text = a.Name,
-					Value = a.CategoryId.ToString(),
+            {
+                CategoryList = categories,
+                RatingList = ratings,
+                Movie = new Movie()
+            };
 
-				}),
-
-				RatingList = _context.R_Ratings.ToList().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-				{
-					Text = a.Name,
-					Value = a.RatingsId.ToString(),
-
-				}),
-
-				Movie = new Movie()
-
-			};
-
-			if(id == null)
+            if (id == null)
 			{
 				return View(vm);
 			}
 			else
 			{
-                //vm.Movie = _context.M_Movies.FirstOrDefault(a => a.MovieId == id);
-                //return View(vm);
+				//vm.Movie = _context.M_Movies.FirstOrDefault(a => a.MovieId == id);
+				//return View(vm);
 
 
 
-                // lets use the repository
-                vm.Movie = _movieRepository.GetById(id.Value);
-
+				// lets use the repository
+				// vm.Movie = _movieRepository.GetById(id.Value);
+				vm.Movie = _unitOfWork.MovieUnit.GetById(id.Value);
 				
                 // If movie is not found, return NotFound
                 if (vm.Movie == null)
@@ -252,7 +328,9 @@ namespace Movie_Project.Areas.Admin.Controllers
 
 				//------------using MovieRepository ----------------------------------
 
-				_movieRepository.Edit(movieVM.Movie);
+				//_movieRepository.Edit(movieVM.Movie);
+
+				_unitOfWork.MovieUnit.Edit(movieVM.Movie);
                 return RedirectToAction("Index");
 
             }
@@ -266,67 +344,88 @@ namespace Movie_Project.Areas.Admin.Controllers
 
 		public IActionResult Delete(int? id)
 		{
-			//MovieVM vm = new MovieVM()
-			//{
-			//	CategoryList = _context.C_Category.ToList().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-			//	{
-			//		Text = a.Name,
-			//		Value = a.CategoryId.ToString(),
+            //MovieVM vm = new MovieVM()
+            //{
+            //	CategoryList = _context.C_Category.ToList().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            //	{
+            //		Text = a.Name,
+            //		Value = a.CategoryId.ToString(),
 
-			//	}),
+            //	}),
 
-			//	RatingList = _context.R_Ratings.ToList().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-			//	{
-			//		Text = a.Name,
-			//		Value = a.RatingsId.ToString(),
+            //	RatingList = _context.R_Ratings.ToList().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            //	{
+            //		Text = a.Name,
+            //		Value = a.RatingsId.ToString(),
 
-			//	}),
+            //	}),
 
-			//	Movie = new Movie()
+            //	Movie = new Movie()
 
-			//};
+            //};
 
-			//if (id == null)
-			//{
-			//	return View(vm);
-			//}
-			//else
-			//{
-			//	vm.Movie = _context.M_Movies.FirstOrDefault(a => a.MovieId == id);
+            //if (id == null)
+            //{
+            //	return View(vm);
+            //}
+            //else
+            //{
+            //	vm.Movie = _context.M_Movies.FirstOrDefault(a => a.MovieId == id);
 
-			//	return View(vm);
+            //	return View(vm);
 
-			//}
-			
-				// Create a new instance of MovieVM and populate CategoryList and RatingList
-				MovieVM vm = new MovieVM ()
-				{
-					CategoryList = _context.C_Category
-						.Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-						{
-							Text = a.Name,
-							Value = a.CategoryId.ToString()
-						}).ToList(),
+            //}
 
-					RatingList = _context.R_Ratings
-						.Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-						{
-							Text = a.Name,
-							Value = a.RatingsId.ToString()
-						}).ToList(),
+            // Create a new instance of MovieVM and populate CategoryList and RatingList
+            //MovieVM vm = new MovieVM ()
+            //{
+            //	CategoryList = _context.C_Category
+            //		.Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            //		{
+            //			Text = a.Name,
+            //			Value = a.CategoryId.ToString()
+            //		}).ToList(),
 
-					Movie = new Movie()
-				};
+            //	RatingList = _context.R_Ratings
+            //		.Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            //		{
+            //			Text = a.Name,
+            //			Value = a.RatingsId.ToString()
+            //		}).ToList(),
 
-				// Check if id is provided
-				if (id.HasValue)
+            //	Movie = new Movie()
+            //};
+
+            var categories = _unitOfWork.CategoryUnit.GetAllCategories().Select(b => new SelectListItem
+            {
+                Text = b.Name,
+                Value = b.CategoryId.ToString(),
+            });
+
+            var ratings = _unitOfWork.RatingUnit.GetAll().Select(c => new SelectListItem
+            {
+                Text = c.Name,
+                Value = c.RatingsId.ToString(),
+            });
+
+            MovieVM vm = new MovieVM()
+            {
+                CategoryList = categories,
+                RatingList = ratings,
+                Movie = new Movie()
+            };
+
+            // Check if id is provided
+            if (id.HasValue)
 				{
 					// Fetch the movie based on the provided id
 					//vm.Movie = _context.M_Movies.FirstOrDefault(a => a.MovieId == id.Value);
 
 				//---using Movierepository ----------------
 
-				    vm.Movie = _movieRepository.GetById(id.Value);
+				   // vm.Movie = _movieRepository.GetById(id.Value);
+
+				vm.Movie = _unitOfWork.MovieUnit.GetById(id.Value);
 
 					// Check if the movie was found
 					if (vm.Movie == null)
@@ -345,10 +444,12 @@ namespace Movie_Project.Areas.Admin.Controllers
 
 		
 		[HttpPost]
-		public IActionResult DeletePost(int id)
+		public IActionResult DeletePost(int? id)
 		{
 			// Fetch the movie record based on the provided id
-			var obj = _context.M_Movies.FirstOrDefault(s => s.MovieId == id);
+			//var obj = _context.M_Movies.FirstOrDefault(s => s.MovieId == id);
+
+			var obj = _unitOfWork.MovieUnit.GetById(id.Value);
 
 			if (obj != null)
 			{
@@ -366,8 +467,10 @@ namespace Movie_Project.Areas.Admin.Controllers
 				}
 
 				// Remove the movie record from the database
-				_context.M_Movies.Remove(obj);
-				_context.SaveChanges();
+				//_context.M_Movies.Remove(obj);
+				//_context.SaveChanges();
+
+				_unitOfWork.MovieUnit.Delete(obj);
 			}
 
 			// Redirect to the Index action after successful deletion

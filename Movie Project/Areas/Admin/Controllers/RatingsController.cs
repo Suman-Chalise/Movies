@@ -1,8 +1,10 @@
 ﻿
 using Data.Data;
+using Data.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Models.Models;
 using System.Diagnostics.Eventing.Reader;
 
@@ -12,20 +14,24 @@ namespace Movie_Project.Areas.Admin.Controllers
     public class RatingsController : Controller
     {
 
-        private readonly ApplicationDbContext _context;
+       // private readonly ApplicationDbContext _context;
+		private readonly IUnitOfWork _unitOfWork;
+
+
 
 		// adding below for image upload 
 
 		private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public RatingsController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public RatingsController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
-            _context = context;
+            //_context = context;
+			_unitOfWork = unitOfWork;
 			_webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
-            var RatingLists = _context.R_Ratings.ToList();
+            var RatingLists = _unitOfWork.RatingUnit.GetAll();
 
             return View(RatingLists);
         }
@@ -74,8 +80,10 @@ namespace Movie_Project.Areas.Admin.Controllers
 					ratings.RatingsLogo = @"\Images\ratingImages\" + filename;
 				}
 
-				_context.R_Ratings.Add(ratings);
-				_context.SaveChanges();
+				//_context.R_Ratings.Add(ratings);
+				//_context.SaveChanges();
+
+				_unitOfWork.RatingUnit.Add(ratings);
 
 				return RedirectToAction("Index");
 
@@ -93,9 +101,9 @@ namespace Movie_Project.Areas.Admin.Controllers
 			}
 			else
 			{
-				var obj = _context.R_Ratings.FirstOrDefault(x => x.RatingsId == id);
-
-				return View(obj);
+				//var obj = _context.R_Ratings.FirstOrDefault(x => x.RatingsId == id);
+				var obj = _unitOfWork.RatingUnit.GetById(id.Value);
+                return View(obj);
 
 			}
 
@@ -138,8 +146,10 @@ namespace Movie_Project.Areas.Admin.Controllers
 
 				}
 				// Update the movie record in the database
-				_context.R_Ratings.Update(ratings);
-				_context.SaveChanges();
+				//_context.R_Ratings.Update(ratings);
+				//_context.SaveChanges();
+
+				_unitOfWork.RatingUnit.Edit(ratings);
 
 				// Redirect to Index after successful update
 				return RedirectToAction("Index");
@@ -174,9 +184,11 @@ namespace Movie_Project.Areas.Admin.Controllers
 
 			//}
 
-			var obj = _context.R_Ratings.FirstOrDefault(a => a.RatingsId == id);
+			//var obj = _context.R_Ratings.FirstOrDefault(a => a.RatingsId == id);
 
-			if (obj != null)
+			var obj = _unitOfWork.RatingUnit.GetById(id.Value);
+
+            if (obj != null)
 			{
 				string wwwrootpath = _webHostEnvironment.WebRootPath;
 
@@ -190,8 +202,10 @@ namespace Movie_Project.Areas.Admin.Controllers
 				}
 
 				// Remove the movie record from the database
-				_context.R_Ratings.Remove(obj);
-				_context.SaveChanges();
+				//_context.R_Ratings.Remove(obj);
+				//_context.SaveChanges();
+
+				_unitOfWork.RatingUnit.Delete(obj);
 			}
 
 			// Redirect to the Index action after successful deletion
