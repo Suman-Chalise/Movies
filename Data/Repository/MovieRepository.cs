@@ -46,5 +46,7 @@ namespace Data.Repository
             _context.M_Movies.Update(movie);
             _context.SaveChanges();
         }
+
+      
     }
 }
