@@ -1,4 +1,5 @@
 ﻿using Data.Data;
+using Data.Repository;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,15 +11,20 @@ namespace Movie_Project.Areas.Admin.Controllers
     public class MovieController : Controller
     {
 
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;  
+
+		private readonly IMovieRepository _movieRepository;
 
 
 		private readonly IWebHostEnvironment _webHostEnvironment;
 
-		public MovieController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+
+
+		public MovieController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, IMovieRepository movieRepository)
 		{
 			_context = context;
 			_webHostEnvironment = webHostEnvironment;
+			_movieRepository = movieRepository;
 		}
 
 		public IActionResult Index()
@@ -45,9 +51,14 @@ namespace Movie_Project.Areas.Admin.Controllers
 			};
 
 
-			var mList =  _context.M_Movies.ToList();
+            //var mList =  _context.M_Movies.ToList();
+            // return View(mList);
 
-            return View(mList);
+
+            // Use the repository to get all movies
+            var ListfromRepo = _movieRepository.GetAll();
+			return View(ListfromRepo);
+           
         }
 
 		public IActionResult Create()
@@ -126,11 +137,17 @@ namespace Movie_Project.Areas.Admin.Controllers
 					movieVM.Movie.Image = @"\Images\MovieImages\" + filename;
 				}
 
-			
-				_context.M_Movies.Add(movieVM.Movie);
-				_context.SaveChanges();
 
-				return RedirectToAction("Index");
+				//_context.M_Movies.Add(movieVM.Movie);
+				//_context.SaveChanges();
+
+
+
+				// Use the repository to add the movie
+
+				_movieRepository.Add(movieVM.Movie);
+
+                return RedirectToAction("Index");
 
 			}
 
@@ -139,7 +156,9 @@ namespace Movie_Project.Areas.Admin.Controllers
 
 		public IActionResult Edit(int? id)
 		{
-			MovieVM vm = new MovieVM()
+            // Initialize the MovieVM with categories and ratings
+
+            MovieVM vm = new MovieVM()
 			{
 				CategoryList = _context.C_Category.ToList().Select(a => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
 				{
@@ -165,11 +184,24 @@ namespace Movie_Project.Areas.Admin.Controllers
 			}
 			else
 			{
-				vm.Movie = _context.M_Movies.FirstOrDefault(a => a.MovieId == id);
+                //vm.Movie = _context.M_Movies.FirstOrDefault(a => a.MovieId == id);
+                //return View(vm);
 
-				return View(vm);
 
-			}
+
+                // lets use the repository
+                vm.Movie = _movieRepository.GetById(id.Value);
+
+				
+                // If movie is not found, return NotFound
+                if (vm.Movie == null)
+                {
+                    return NotFound();
+                }
+
+                return View(vm);
+
+            }
 
 	
 
@@ -210,14 +242,20 @@ namespace Movie_Project.Areas.Admin.Controllers
 					movieVM.Movie.Image = @"\Images\MovieImages\" + fileName;
 				}
 
-				// Update the movie record in the database
-				_context.M_Movies.Update(movieVM.Movie);
-				_context.SaveChanges();
+				//// Update the movie record in the database
+				//_context.M_Movies.Update(movieVM.Movie);
+				//_context.SaveChanges();
 
-				// Redirect to Index after successful update
-				return RedirectToAction("Index");
+				//// Redirect to Index after successful update
+				//return RedirectToAction("Index");
 
-			}
+
+				//------------using MovieRepository ----------------------------------
+
+				_movieRepository.Edit(movieVM.Movie);
+                return RedirectToAction("Index");
+
+            }
 			else
 			{
 				// If the model state is invalid, return the view with the current movieVM
@@ -284,7 +322,11 @@ namespace Movie_Project.Areas.Admin.Controllers
 				if (id.HasValue)
 				{
 					// Fetch the movie based on the provided id
-					vm.Movie = _context.M_Movies.FirstOrDefault(a => a.MovieId == id.Value);
+					//vm.Movie = _context.M_Movies.FirstOrDefault(a => a.MovieId == id.Value);
+
+				//---using Movierepository ----------------
+
+				    vm.Movie = _movieRepository.GetById(id.Value);
 
 					// Check if the movie was found
 					if (vm.Movie == null)

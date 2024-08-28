@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Data.Data;
 using Microsoft.EntityFrameworkCore.SqlServer;
+using Data.Repository;
 
 namespace Movie_Project
 {
@@ -19,6 +20,8 @@ namespace Movie_Project
             // below we had to add because all seperated with class library and need to specify correct project
 
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connections, b => b.MigrationsAssembly("Movie Project")));
+
+            builder.Services.AddScoped<IMovieRepository, MovieRepository>();
        
 
             var app = builder.Build();
