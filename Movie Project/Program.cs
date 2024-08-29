@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Data.Data;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Data.Repository;
+using Microsoft.AspNetCore.Identity;
 
 namespace Movie_Project
 {
@@ -21,9 +22,17 @@ namespace Movie_Project
 
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connections, b => b.MigrationsAssembly("Movie Project")));
 
-            builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+            //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+            // to work identiy we add below as identity will be in Razor pages 
+            builder.Services.AddRazorPages();
+
+            // builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            
        
 
             var app = builder.Build();
@@ -41,7 +50,12 @@ namespace Movie_Project
 
             app.UseRouting();
 
+            app.UseAuthentication(); // checking if username and password is valid -- just before authorisation
+
             app.UseAuthorization();
+
+            //this to add for identity as identity is in razor pages not MVC
+            app.MapRazorPages();
 
             app.MapControllerRoute(
                 name: "default",
