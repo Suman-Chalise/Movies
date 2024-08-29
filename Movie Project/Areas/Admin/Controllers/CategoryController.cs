@@ -1,16 +1,19 @@
 ﻿using Data.Data;
 using Data.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.Models;
+using Utility;
 
 namespace Movie_Project.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = Roles.Role_Admin)] // adding this means only admin can access below 
     public class CategoryController : Controller
     {
 
         //private readonly ApplicationDbContext _context;
-
+         
         private readonly IUnitOfWork _unitOfWork;
 
         

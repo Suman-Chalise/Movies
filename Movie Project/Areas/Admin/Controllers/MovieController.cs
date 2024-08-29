@@ -1,14 +1,17 @@
 ﻿using Data.Data;
 using Data.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Models.Models;
 using Models.ViewModels;
+using Utility;
 namespace Movie_Project.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = Roles.Role_Admin)] // adding this means only admin can access below 
     public class MovieController : Controller
     {
 

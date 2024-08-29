@@ -31,10 +31,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Data\Data.csproj" />
+    <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Identity\Data\" />
     <Folder Include="wwwroot\Images\MovieImages\" />
     <Folder Include="wwwroot\Images\ratingImages\" />
   </ItemGroup>

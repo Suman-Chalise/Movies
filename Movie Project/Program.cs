@@ -3,6 +3,8 @@ using Data.Data;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Data.Repository;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Utility;
 
 namespace Movie_Project
 {
@@ -32,8 +34,12 @@ namespace Movie_Project
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            
-       
+            //adding email services 
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
+
+           
+
+
 
             var app = builder.Build();
 
