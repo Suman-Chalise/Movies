@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movie Project", "Movie Project\Movie Project.csproj", "{E35C74FD-6E99-4D7F-AC1E-C3F32620F93C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Movie Project", "Movie Project\Movie Project.csproj", "{E35C74FD-6E99-4D7F-AC1E-C3F32620F93C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{45EC9686-6992-4648-BEF9-83D2683923DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{45EC9686-6992-4648-BEF9-83D2683923DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{585C46F8-92CC-4693-B945-7F91B3C82074}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{585C46F8-92CC-4693-B945-7F91B3C82074}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Utility\Utility.csproj", "{C3A67E30-A955-4BA6-A946-F4479AD45F4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility", "Utility\Utility.csproj", "{C3A67E30-A955-4BA6-A946-F4479AD45F4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

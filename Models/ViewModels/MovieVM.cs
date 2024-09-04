@@ -20,5 +20,6 @@ namespace Models.ViewModels
 		[ValidateNever]
 		public IEnumerable<SelectListItem> RatingList { get; set; }
 
+
 	}
 }

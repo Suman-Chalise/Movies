@@ -1,0 +1,155 @@
+﻿@page
+@model Movie_Project.Areas.Identity.Pages.Account.Manage.UsersModel
+@{
+}
+
+@* <table>
+	<thead>
+		<tr>
+			<th>user</th>
+			<th>Name</th>
+			<th>Email</th>
+		</tr>
+
+	</thead>
+	<tbody>
+		@foreach (var item in Model.userList)
+		{
+			<tr>
+				<td>@item.UserName</td>
+				<td>@item.NormalizedUserName</td>
+				<td>@item.Email</td>
+			</tr>
+
+		}
+
+
+	</tbody>
+
+</table> *@
+
+@* <table>
+	<thead>
+		<tr>
+			<th>user</th>
+			<th>Name</th>
+			<th>City</th>
+		</tr>
+
+	</thead>
+	<tbody>
+		@foreach (var item in Model.applications)
+		{
+			<tr>
+				<td>@item.UserName</td>
+				<td>@item.Name</td>
+				<td>@item.City</td>
+			</tr>
+
+		}
+
+
+	</tbody>
+
+</table> *@
+
+@* <table>
+	<thead>
+		<tr>
+			<th>user</th>
+			<th>N name</th>
+			<th>ID</th>
+		</tr>
+
+	</thead>
+	<tbody>
+		@foreach (var item in Model.roleList)
+		{
+			<tr>
+				<td>@item.Name</td>
+				<td>@item.NormalizedName</td>
+				<td>@item.Id</td>
+			</tr>
+
+		}
+
+
+	</tbody>
+
+</table> *@
+
+
+
+@* <h2>Users and Roles</h2>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>User</th>
+			<th>Roles</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var userWithRoles in Model.UsersWithRolesList)
+		{
+			<tr>
+				<td>@userWithRoles.User.UserName</td>
+				<td>
+					@foreach (var role in userWithRoles.Roles)
+					{
+						<span>@role</span>
+
+						<br />
+					}
+				</td>
+			</tr>
+		}
+	</tbody>
+</table> *@
+
+				<h2>Users and Roles</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>User</th>
+			
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var userWithRoles in Model.UsersWithRolesList)
+        {
+            <tr>
+                <td>@userWithRoles.User.UserName</td>
+                <td>
+                    @foreach (var role in userWithRoles.Roles)
+                    {
+                        <span>@role</span><br />
+                    }
+                </td>
+                <td>
+                    <!-- Edit User Roles Form -->
+                    <form method="post" asp-page-handler="Edit">
+                        <input type="hidden" name="userId" value="@userWithRoles.User.Id" />
+                        <div class="form-group">
+                            @foreach (var role in Model.roleList)
+                            {
+                                <input type="checkbox" name="roles" value="@role.Name" @(userWithRoles.Roles.Contains(role.Name) ? "checked" : "") />
+                                <label>@role.Name</label><br />
+                            }
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Roles</button>
+                    </form>
+
+                    <!-- Delete User Button -->
+                    <form method="post" asp-page-handler="Delete" style="display:inline;">
+                        <input type="hidden" name="userId" value="@userWithRoles.User.Id" />
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -116,13 +116,26 @@ namespace Movie_Project.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            // Adding below for other labels on the form to register user login -------------------------------------------------
+            [Required]
+            public string Name { get; set; }
+
+            [Required] 
+            public string? PostCode { get; set; }
+
+            public string? StreetAddress { get; set; }
+
+            public string? City { get; set; }
+
+            public string? State { get; set; }
         }
 
 
         public async Task OnGetAsync(string returnUrl = null)
         {
 
-            // lets create roles here 
+            // lets create roles here  ------------------------------------------
 
             if (!_roleManager.RoleExistsAsync(Roles.Role_Customer).GetAwaiter().GetResult())
             {
@@ -154,7 +167,7 @@ namespace Movie_Project.Areas.Identity.Pages.Account
 
                     await _userManager.AddToRoleAsync(user, Roles.Role_Customer);
 
-                    //----------------------------------------
+                    //------------------------------------------------------
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
